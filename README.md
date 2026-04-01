@@ -4,10 +4,12 @@
 
 [legalize](https://github.com/legalize-dev/legalize) (스페인 법령 Git 프로젝트)에서 영감을 받았습니다.
 
+> **공지**: 법령 정보를 가져오고 파싱하는 파이프라인이 개선될 경우, 전체 법령 히스토리를 재구성하기 위해 force-push가 실행될 수 있습니다. 이 경우 모든 commit hash가 변경됩니다. 이 저장소를 fork하거나 참조하는 경우, force-push 이후 `git fetch --all && git reset --hard origin/main`으로 동기화해 주세요.
+
 ## 빠른 시작
 
 ```bash
-git clone https://github.com/9bow/legalize-kr.git
+git clone https://github.com/legalize-kr/legalize-kr.git
 cd legalize-kr
 
 # 민법 현재 내용 보기
@@ -46,7 +48,6 @@ kr/{법령명}/
 - `kr/민법/시행령.md`: 민법 시행령
 - `kr/친일반민족행위자재산의국가귀속에관한특별법/법률.md`: 친일반민족행위자 재산의 국가귀속에 관한 특별법
 - `kr/친일반민족행위자재산의국가귀속에관한특별법/시행령.md`: 친일반민족행위자 재산의 국가귀속에 관한 특별법 시행령
-- `kr/국군조직법제9조제3항에따른전투를주임무로하는각군의작전부대등에관한규정/대통령령.md`: 국군조직법 제9조제3항에 따른 전투를 주임무로 하는 각 군의 작전부대 등에 관한 규정
 
 ### 파일 이름 규칙
 
@@ -104,20 +105,7 @@ kr/{법령명}/
 법령MST: 284415
 ```
 
-> **참고**: Git은 Unix Epoch(1970-01-01) 이전 날짜를 지원하지 않습니다. 이에 해당하는 5건의 법령(공포일자 1950~1969년)은 커밋 날짜가 1970-01-01로 고정되어 있습니다. 실제 공포일자는 각 파일의 YAML frontmatter `공포일자` 필드에 정확히 기록되어 있습니다.
-
-인프라 커밋은 일반 날짜와 [Conventional Commits](https://www.conventionalcommits.org/) 형식을 사용합니다.
-
-```bash
-# 법령 커밋만 보기
-git log --grep="^법률:"
-
-# 특정 법령 이력 보기
-git log -- kr/민법/
-
-# 인프라 커밋만 보기
-git log --grep="^chore:"
-```
+> **참고**: Git은 Unix Epoch(1970-01-01) 이전 날짜를 지원하지 않습니다. 이에 해당하는 법령은 커밋 날짜가 1970-01-01로 고정되어 있습니다. 실제 공포일자는 각 파일의 YAML frontmatter `공포일자` 필드에 정확히 기록되어 있습니다.
 
 ## Unicode 정규화
 
@@ -125,19 +113,21 @@ git log --grep="^chore:"
 - `·` (U+00B7, Middle Dot) → `ㆍ` (U+318D, Hangul Letter Araea)로 정규화
 - 예: `10·27` → `10ㆍ27`
 
+## 저장소 구조
+
+이 프로젝트는 3개의 저장소로 구성되어 있습니다:
+
+| 저장소 | 설명 |
+|--------|------|
+| [legalize-kr/legalize-kr](https://github.com/legalize-kr/legalize-kr) | 법령 데이터 (이 저장소) |
+| [legalize-kr/legalize-pipeline](https://github.com/legalize-kr/legalize-pipeline) | 수집·변환·검증 파이프라인 |
+| [legalize-kr/legalize-web](https://github.com/legalize-kr/legalize-web) | 웹사이트 ([legalize.kr](https://legalize.kr)) |
+
 ## 데이터 출처
 
 모든 법령 데이터는 [국가법령정보센터 OpenAPI](https://open.law.go.kr)에서 가져옵니다. 법령 원문은 대한민국 정부 공공저작물로 자유롭게 이용 가능합니다.
 
-## 도구
-
-수집, 변환, 검증 파이프라인은 `scripts/` 디렉토리에 있습니다. 사용법은 [scripts/README.md](scripts/README.md)를 참조하세요.
-
-## 웹사이트
-
-[legalize.kr](https://legalize.kr): GitHub Pages로 배포됩니다.
-
 ## 라이선스
 
 - 법령 원문: 공공저작물 (대한민국 정부 저작물)
-- 저장소 구조, 메타데이터, 도구: [MIT](LICENSE)
+- 저장소 구조, 메타데이터: MIT
